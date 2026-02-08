@@ -1,2 +1,3 @@
 *.db
-goats
+/goats
+/cmd/goats/goats
