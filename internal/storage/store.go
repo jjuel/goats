@@ -2,6 +2,8 @@ package storage
 
 import (
 	"database/sql"
+	"os"
+	"path/filepath"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -20,8 +22,19 @@ type Store struct {
 }
 
 func (s *Store) Init() error {
-	var err error
-	s.conn, err = sql.Open("sqlite3", "./goats.db")
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+
+	dataDir := filepath.Join(home, ".local", "share", "goats")
+	if err := os.MkdirAll(dataDir, 0755); err != nil {
+		return err
+	}
+
+	dbPath := filepath.Join(dataDir, "goats.db")
+
+	s.conn, err = sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return err
 	}
