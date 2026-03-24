@@ -22,38 +22,38 @@ var (
 // Base styles
 var (
 	appNameStyle = lipgloss.NewStyle().
-		Foreground(colorBg).
-		Background(colorPink).
-		Bold(true).
-		Padding(0, 2)
+			Foreground(colorBg).
+			Background(colorPink).
+			Bold(true).
+			Padding(0, 2)
 
 	containerStyle = lipgloss.NewStyle().
-		Background(colorBg).
-		Foreground(colorFg).
-		Padding(1, 2)
+			Background(colorBg).
+			Foreground(colorFg).
+			Padding(1, 2)
 
 	headerStyle = lipgloss.NewStyle().
-		Foreground(colorCyan).
-		Bold(true)
+			Foreground(colorCyan).
+			Bold(true)
 
 	selectedStyle = lipgloss.NewStyle().
-		Foreground(colorBg).
-		Background(colorCyan).
-		Bold(true)
+			Foreground(colorBg).
+			Background(colorCyan).
+			Bold(true)
 
 	normalStyle = lipgloss.NewStyle().
-		Foreground(colorFg)
+			Foreground(colorFg)
 
 	helpStyle = lipgloss.NewStyle().
-		Foreground(colorGray).
-		Italic(true)
+			Foreground(colorGray).
+			Italic(true)
 
 	listItemStyle = lipgloss.NewStyle().
-		PaddingLeft(1)
+			PaddingLeft(1)
 
 	savedStyle = lipgloss.NewStyle().
-		Foreground(colorGreen).
-		Bold(true)
+			Foreground(colorGreen).
+			Bold(true)
 )
 
 func (m model) View() string {
@@ -63,6 +63,7 @@ func (m model) View() string {
 	if m.state == titleView {
 		content = appNameStyle.Render("Goats") + "\n\n"
 		content += headerStyle.Render("New Note") + "\n\n"
+		content += m.modeIndicator() + "\n\n"
 		content += m.textinput.View() + "\n\n"
 		content += m.helpBar()
 	}
@@ -94,6 +95,7 @@ func (m model) View() string {
 			titleDisplay = "Untitled"
 		}
 		content += headerStyle.Render("Editing: "+titleDisplay) + "\n\n"
+		content += m.modeIndicator() + "\n\n"
 		content += m.textarea.View() + "\n\n"
 
 		// Show save indicator if saved within last 2 seconds
@@ -124,9 +126,23 @@ func (m model) helpBar() string {
 		}
 		return helpStyle.Render("n: new note | d: delete note | ↑↓: navigate | enter: open | q: quit")
 	case titleView:
-		return helpStyle.Render("enter: confirm | esc: cancel")
+		if m.editorMode == insertMode {
+			return helpStyle.Render("insert: type | enter: body | esc: normal")
+		}
+		return helpStyle.Render("normal: h/l move | i/a: insert | enter: body | esc: cancel")
 	case bodyView:
-		return helpStyle.Render("ctrl+s: save | esc: back")
+		if m.editorMode == insertMode {
+			return helpStyle.Render("insert: type | ctrl+s: save | esc: normal")
+		}
+		return helpStyle.Render("normal: hjkl move | i/a: insert | ctrl+s: save | esc: back")
 	}
 	return ""
+}
+
+func (m model) modeIndicator() string {
+	if m.editorMode == insertMode {
+		return savedStyle.Render("-- INSERT --")
+	}
+
+	return headerStyle.Render("-- NORMAL --")
 }
