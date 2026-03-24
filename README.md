@@ -55,14 +55,22 @@ Once the application is running, you can use the following keybindings to intera
 *   `q` / `Ctrl+c`: Quit the application.
 
 ### Title View (Creating a Note)
-*   Type your title.
+*   Starts in Vim `INSERT` mode.
+*   `Esc`: Switch to `NORMAL` mode.
+*   `i` / `a` / `I` / `A`: Re-enter `INSERT` mode from `NORMAL` mode.
+*   `h` / `l`, `0` / `$`, `w` / `b`: Move the cursor in `NORMAL` mode.
+*   `x`: Delete the character under the cursor in `NORMAL` mode.
 *   `Enter`: Confirm title and move to the body editor.
-*   `Esc`: Cancel and return to the list view.
+*   `Esc` in `NORMAL` mode: Cancel and return to the list view.
 
 ### Body View (Editing a Note)
-*   Type to edit the note content.
+*   New notes start in Vim `INSERT` mode; existing notes open in `NORMAL` mode.
+*   `Esc`: Leave `INSERT` mode and enter `NORMAL` mode.
+*   `i` / `a` / `I` / `A`: Enter `INSERT` mode from `NORMAL` mode.
+*   `h` / `j` / `k` / `l`, `0` / `$`, `w` / `b`: Navigate in `NORMAL` mode.
+*   `x`: Delete the character under the cursor in `NORMAL` mode.
 *   `Ctrl+s`: Save the note.
-*   `Esc`: Return to the list view (unsaved changes will be lost unless saved).
+*   `Esc` in `NORMAL` mode: Return to the list view.
 
 ## Tech Stack
 
